@@ -1,0 +1,15 @@
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] MongoDB starting : pid=8598 port=27017 dbpath=db/mongodb 64-bit host=macbookphigair.local
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] db version v3.4.9
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] git version: 876ebee8c7dd0e2d992f36a848ff4dc50ee6603e
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.0.2l  25 May 2017
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] allocator: system
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] modules: none
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] build environment:
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten]     distarch: x86_64
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten]     target_arch: x86_64
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] options: { storage: { dbPath: "db/mongodb" }, systemLog: { destination: "file", path: "db/mongodb.log" } }
+2017-09-18T11:46:51.575+0900 I STORAGE  [initandlisten] exception in initAndListen: 29 Data directory db/mongodb not found., terminating
+2017-09-18T11:46:51.575+0900 I NETWORK  [initandlisten] shutdown: going to close listening sockets...
+2017-09-18T11:46:51.575+0900 I NETWORK  [initandlisten] shutdown: going to flush diaglog...
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] now exiting
+2017-09-18T11:46:51.575+0900 I CONTROL  [initandlisten] shutting down with code:100
