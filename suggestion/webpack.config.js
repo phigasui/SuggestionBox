@@ -1,17 +1,36 @@
 module.exports = {
-    // エントリポイント
-    entry: __dirname + "/src/index.js",
+  // target
+  entry: __dirname + "/src/index.js",
 
-    // 出力先の設定
-    output: {
-        path: __dirname + "/dist",
-        filename: "budle.js"
-    },
+  output: {
+    path: __dirname + "/dist",
+    publicPath: "/dist/",
+    filename: "bundle.js"
+  },
 
-    // jsx に babel さんつかってくださいねーって。。。
-    module: {
-        loaders: [
-            {test: /\.jsx$/, loader: "babel"}
+  module: {
+    // compiler
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: "babel-loader"
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true, // default is false
+              sourceMap: true,
+              importLoaders: 1,
+              localIdentName: "[name]--[local]--[hash:base64:8]"
+            }
+          },
+          "postcss-loader"
         ]
-    }
+      }
+    ]
+  }
 };
