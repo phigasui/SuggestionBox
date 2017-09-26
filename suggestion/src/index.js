@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import $ from "jquery";
-import { Button, IconButton, Snackbar } from 'react-toolbox/lib/button';
+import { Button, IconButton } from 'react-toolbox/lib/button';
+import { Snackbar } from 'react-toolbox';
 import Input from 'react-toolbox/lib/input';
 import {
   Card, CardMedia, CardTitle, CardText, CardActions
 } from 'react-toolbox/lib/card';
 import AppBar from 'react-toolbox/lib/app_bar';
 import Navigation from 'react-toolbox/lib/navigation';
-import Link from 'react-toolbox/lib/Link';
-import FontIcon from 'react-toolbox/lib/font_icon';
 
 
 class Suggestion extends Component {
@@ -77,9 +76,13 @@ class Form extends Component {
   constructor() {
     super();
     this.state = {
-      title: '',
-      desc: '',
-      submit: false
+      values: {
+        title: '',
+        desc: ''
+      },
+      submitted: false,
+      failed: false,
+      failed_message: ''
     };
   }
 
@@ -87,10 +90,11 @@ class Form extends Component {
     $.ajax({
       type: "POST",
       url: this.props.url,
-      data: this.state,
+      data: this.state.values,
       dataType: "JSON"
     })
       .done((data) => {
+        this._submitComplete();
         console.log(data.message);
       })
       .fail((xhr, status, error) => {
@@ -98,49 +102,76 @@ class Form extends Component {
       });
   }
 
+  _submitComplete() {
+    this.setState({ submitted: true });
+  }
+
   handleChange(name, value) {
-    this.setState({...this.state, [name]: value});
+    values = this.state.values;
+    values[name] = value;
+    this.setState({ values: values });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({ submit: true });
     this.saveSuggestions();
   }
 
-  handleSnackbarClick() {
-    this.setState({ submit: false });
+  handleSnackbarClick(event, instance) {
+    this.setState({ submitted: false });
   }
 
-  handleSnackbarTimeout() {
-    this.setState({ submit: false });
+  handleSnackbarTimeout(event, instance) {
+    this.setState({ submitted: false });
   }
 
   render() {
+    console.log(this.state.values);
     return(
-      <section>
+      <section style={{width: '350px'}}>
         <h2>New Suggestion</h2>
         <div>
-          <Input type='text' label='Title' name='title'
-                 value={this.state.title}
-                 onChange={this.handleChange.bind(this, 'title')}
-                 maxLength={16} />
-          <Input type='text' multiline label='Description' name='desc'
-                 value={this.state.desc}
-                 onChange={this.handleChange.bind(this, 'desc')}
-                 maxLength={300} />
+          <Input
+            type='text'
+            label='Title'
+            name='title'
+            value={this.state.values.title}
+            onChange={this.handleChange.bind(this, 'title')}
+            maxLength={16}
+            />
+          <Input
+            type='text'
+            multiline
+            label='Description'
+            name='desc'
+            value={this.state.values.desc}
+            onChange={this.handleChange.bind(this, 'desc')}
+            maxLength={300}
+            />
         </div>
-        <Button label="Submit" onClick={this.handleSubmit.bind(this)}
-                raised primary />
-        {/* <Snackbar
-                action='Submitted'
-                active={this.state.submit}
-                label='Suggestion submitted'
-                timeout={2000}
-                onClick={this.handleSnackbarClick}
-                onTimeout={this.handleSnackbarTimeout}
-                type='accept'
-              /> */}
+        <Button
+          label="Submit"
+          onClick={this.handleSubmit.bind(this)}
+          raised primary
+          />
+        <Snackbar
+          action='Submit'
+          active={this.state.submitted}
+          label='Suggestion submitted'
+          timeout={2000}
+          onClick={this.handleSnackbarClick.bind(this)}
+          onTimeout={this.handleSnackbarTimeout.bind(this)}
+          type='accept'
+          />
+        <Snackbar
+          action='Failed'
+          active={this.state.failed}
+          label={this.state.failed_message}
+          timeout={2000}
+          onClick={this.handleSnackbarClick.bind(this)}
+          onTimeout={this.handleSnackbarTimeout.bind(this)}
+          type='accept'
+          />
       </section>
     );
   }
@@ -157,9 +188,8 @@ class SuggestionBox extends Component {
       <div>
         <AppBar title='Suggestion Box' leftIcon='menu'>
           <Navigation type='horizontal'>
-            <FontIcon value='add' />
-            <Link href='http://' label='Inbox' icon='inbox' />
-            <Link href='http://' active label='Profile' icon='person' />
+            <Button icon='inbox' label='inbox' raised />
+            <Button icon='person' label='inbox' raised />
           </Navigation>
         </AppBar>
         <Form url='http://localhost:5000/api/suggestions' />
